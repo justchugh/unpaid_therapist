@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Note to My Unpaid Therapist...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Indie+Flower&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #1a1a1a;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(101, 67, 33, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(160, 82, 45, 0.2) 0%, transparent 50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Kalam', cursive;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Thank you note overlay */
+        .thank-you-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: opacity 1s ease;
+        }
+
+        .thank-you-content {
+            text-align: center;
+            padding: 40px;
+            background: rgba(245, 241, 232, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            animation: thankYouPulse 2s ease-in-out;
+        }
+
+        @keyframes thankYouPulse {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .thank-you-text {
+            font-size: 1.8em;
+            color: #1a1a2e;
+            font-family: 'Caveat', cursive;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .continue-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-family: 'Caveat', cursive;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Music player - Fixed at bottom */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(245, 241, 232, 0.9);
+            border-radius: 50px;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1003;
+            transition: all 0.3s ease;
+        }
+
+        .music-player.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(100px);
+        }
+
+        .music-info {
+            font-family: 'Caveat', cursive;
+            color: #1a1a2e;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Notebook container */
+        .notebook-container {
+            width: 90%;
+            max-width: 800px;
+            height: 85vh;
+            max-height: 900px;
+            position: relative;
+            transform: rotate(-0.5deg);
+            filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.9));
+            z-index: 10;
+        }
+
+        /* Notebook paper with aged effect */
+        .notebook-page {
+            width: 100%;
+            height: 100%;
+            background: #f5f1e8;
+            background-image: 
+                radial-gradient(ellipse at top left, rgba(139, 69, 19, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at bottom right, rgba(160, 82, 45, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 70% 40%, rgba(139, 69, 19, 0.05) 0%, transparent 30%);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 2px;
+            box-shadow: 
+                inset 0 0 60px rgba(139, 69, 19, 0.15),
+                inset 0 0 20px rgba(0, 0, 0, 0.1),
+                0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Scrollbar styling */
+        .notebook-page::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .notebook-page::-webkit-scrollbar-track {
+            background: rgba(139, 69, 19, 0.1);
+        }
+
+        .notebook-page::-webkit-scrollbar-thumb {
+            background: rgba(139, 69, 19, 0.3);
+            border-radius: 4px;
+        }
+
+        /* Paper texture overlay with stains */
+        .paper-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 15%),
+                radial-gradient(circle at 80% 60%, rgba(160, 82, 45, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 60% 90%, rgba(101, 67, 33, 0.06) 0%, transparent 25%),
+                repeating-linear-gradient(100deg, transparent, transparent 3px, rgba(139, 69, 19, 0.02) 3px, rgba(139, 69, 19, 0.02) 6px),
+                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(139, 69, 19, 0.02) 3px, rgba(139, 69, 19, 0.02) 6px);
+            pointer-events: none;
+            mix-blend-mode: multiply;
+        }
+
+        /* Coffee stain effect */
+        .coffee-stain {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 30%, rgba(139, 69, 19, 0.05) 40%, rgba(160, 82, 45, 0.08) 60%, transparent 70%);
+            top: 150px;
+            right: 100px;
+            transform: rotate(45deg);
+        }
+
+        /* Content wrapper for scrolling */
+        .content-wrapper {
+            position: relative;
+            padding: 20px 40px 100px 80px;
+            min-height: 100%;
+            /* Fixed lines alignment */
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 31px,
+                #a9a9a9b3 31px,
+                #a9a9a9b3 32px
+            );
+            background-position: 0 88px;
+            background-attachment: local;
+        }
+
+        /* Red margin line - Fixed to run throughout */
+        .margin-line {
+            position: fixed;
+            left: 60px;
+            top: 0;
+            height: 100vh;
+            width: 2px;
+            background: rgba(255, 192, 203, 0.6);
+            pointer-events: none;
+            z-index: 11;
+        }
+
+        /* Holes */
+        .holes {
+            position: absolute;
+            left: 25px;
+            top: 50px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hole {
+            width: 20px;
+            height: 20px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            margin-bottom: 50px;
+            box-shadow: 
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                0 1px 2px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Title */
+        .title {
+            font-size: 2.2em;
+            color: #4a47a3;
+            font-family: 'Caveat', cursive;
+            font-weight: 700;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+            text-align: center;
+            transform: rotate(-0.5deg);
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            padding-top: 2px;
+        }
+
+        /* Letter content area */
+        .letter-content {
+            font-size: 1.1em;
+            line-height: 32px;
+            color: #1a1a2e;
+            font-family: 'Kalam', cursive;
+            position: relative;
+            z-index: 1;
+            padding-top: 0;
+        }
+
+        /* Paragraph styling - Fixed to align with lines */
+        .paragraph {
+            margin-bottom: 0;
+            text-align: justify;
+            position: relative;
+            padding-bottom: 30px;
+            line-height: 31px;
+            padding-top: 1px;
+        }
+
+        .paragraph:last-child {
+            padding-bottom: 0;
+        }
+
+        /* Text animation classes */
+        .word {
+            display: inline;
+            opacity: 0;
+            position: relative;
+        }
+
+        .word.visible {
+            animation: writeWord 0.3s ease-out forwards;
+        }
+
+        @keyframes writeWord {
+            0% {
+                opacity: 0;
+                transform: translateY(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Signature */
+        .signature {
+            margin-top: 64px;
+            text-align: right;
+            padding-right: 80px;
+            font-size: 1.6em;
+            color: #e74c3c;
+            font-family: 'Caveat', cursive;
+            font-weight: 700;
+            opacity: 0;
+            transform: rotate(-2deg);
+        }
+
+        /* Heart animation */
+        .heart {
+            display: inline-block;
+            color: #e74c3c;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Golden dust particles canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Writing pen/cursor */
+        .pen-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pen-tip {
+            width: 4px;
+            height: 4px;
+            background: #1a1a2e;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 6px rgba(26, 26, 46, 0.5);
+        }
+
+        .pen-glow {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: penGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes penGlow {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 0.3; }
+        }
+
+        /* Hamburger menu */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(245, 241, 232, 0.9);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .menu-line {
+            width: 20px;
+            height: 2px;
+            background: #1a1a1a;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active .menu-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active .menu-line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: rgba(245, 241, 232, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .menu-item {
+            margin-bottom: 15px;
+        }
+
+        .menu-button {
+            background: #4a47a3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .menu-button:hover {
+            background: #3a3785;
+            transform: translateY(-2px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            color: #1a1a1a;
+        }
+
+        .speed-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(139, 69, 19, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #f39c12;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Music controls in menu */
+        .music-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            color: #1a1a1a;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(74, 71, 163, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #4a47a3;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            transition: width 0.3s ease;
+            z-index: 1002;
+        }
+
+        /* Decorative envelope */
+        .envelope {
+            position: fixed;
+            bottom: 50px;
+            left: 50px;
+            width: 200px;
+            height: 140px;
+            background: #d4c5b0;
+            transform: rotate(-15deg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-top: 70px solid #c5b69c;
+        }
+
+        /* Decorative rose */
+        .rose {
+            position: fixed;
+            bottom: 80px;
+            right: 100px;
+            width: 150px;
+            height: 150px;
+            transform: rotate(25deg);
+            z-index: 0;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+            opacity: 0.65;
+        }
+
+        .rose-bloom {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: #8b6f6f;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset 0 -10px 20px rgba(139, 71, 71, 0.8);
+        }
+
+        .rose-bloom::before,
+        .rose-bloom::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #8b6f6f;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        .rose-bloom::before {
+            top: -10px;
+            left: -15px;
+            transform: rotate(-30deg);
+            background: #9b7f7f;
+        }
+
+        .rose-bloom::after {
+            top: -10px;
+            right: -15px;
+            transform: rotate(30deg);
+            background: #7b5f5f;
+        }
+
+        .rose-stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 90px;
+            background: #3a4d2a;
+            border-radius: 2px;
+        }
+
+        .rose-leaf {
+            position: absolute;
+            bottom: 30px;
+            left: -20px;
+            width: 30px;
+            height: 20px;
+            background: #4a5d3a;
+            border-radius: 0 100% 0 100%;
+            transform: rotate(-45deg);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .notebook-container {
+                width: 95%;
+                height: 90vh;
+                transform: rotate(0deg);
+            }
+
+            .content-wrapper {
+                padding: 20px 30px 80px 60px;
+                background-position: 0 78px;
+            }
+
+            .title {
+                font-size: 1.8em;
+            }
+
+            .letter-content {
+                font-size: 1em;
+                line-height: 30px;
+            }
+
+            .paragraph {
+                padding-bottom: 28px;
+                line-height: 29px;
+            }
+
+            .paragraph:last-child {
+                padding-bottom: 0;
+            }
+
+            .margin-line {
+                left: 40px;
+            }
+
+            .holes {
+                display: none;
+            }
+
+            .signature {
+                padding-right: 30px;
+            }
+
+            .envelope {
+                width: 150px;
+                height: 100px;
+                bottom: 30px;
+                left: 20px;
+            }
+
+            .envelope::before {
+                border-left-width: 75px;
+                border-right-width: 75px;
+                border-top-width: 50px;
+            }
+
+            .rose {
+                width: 100px;
+                height: 100px;
+                bottom: 40px;
+                right: 20px;
+            }
+
+            .rose-bloom {
+                width: 40px;
+                height: 40px;
+            }
+
+            .rose-bloom::before,
+            .rose-bloom::after {
+                width: 35px;
+                height: 35px;
+            }
+
+            .rose-stem {
+                height: 60px;
+                width: 3px;
+            }
+
+            .rose-leaf {
+                width: 20px;
+                height: 15px;
+                bottom: 20px;
+                left: -15px;
+            }
+
+            .music-player {
+                bottom: 10px;
+                padding: 10px 20px;
+                gap: 15px;
+            }
+
+            .music-info {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Thank you overlay -->
+    <div class="thank-you-overlay" id="thankYouOverlay">
+        <div class="thank-you-content">
+            <div class="thank-you-text">
+                Thank you so so so so sooooo much for this beautifully written note mera booboo, I love you so much I'm really touched -- literally down there me -- I love you mera chota bacha. ❤️
+            </div>
+            <button class="continue-btn" onclick="startExperience()">Open Note</button>
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Music Player - Fixed at bottom -->
+    <div class="music-player hidden" id="musicPlayer">
+        <div class="music-info">🎵 Tum Se Hi</div>
+    </div>
+
+    <!-- Decorative envelope -->
+    <div class="envelope"></div>
+
+    <!-- Decorative rose -->
+    <div class="rose">
+        <div class="rose-bloom"></div>
+        <div class="rose-stem"></div>
+        <div class="rose-leaf"></div>
+    </div>
+
+    <!-- Notebook container -->
+    <div class="notebook-container">
+        <div class="notebook-page" id="notebookPage">
+            <!-- Paper texture and effects -->
+            <div class="paper-texture"></div>
+            <div class="coffee-stain"></div>
+            
+            <!-- Red margin line -->
+            <div class="margin-line"></div>
+            
+            <!-- Holes -->
+            <div class="holes">
+                <div class="hole"></div>
+                <div class="hole"></div>
+                <div class="hole"></div>
+            </div>
+
+            <!-- Content wrapper for scrolling -->
+            <div class="content-wrapper">
+                <!-- Title -->
+                <h1 class="title">A NOTE to My Unpaid Therapist...</h1>
+                
+                <!-- Letter content -->
+                <div class="letter-content" id="letterContent">
+                    <!-- Content will be dynamically inserted with proper paragraphs -->
+                </div>
+                
+                <!-- Signature -->
+                <div class="signature" id="signature">
+                    - Love Ri <span class="heart">❤</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Writing pen cursor -->
+    <div class="pen-cursor" id="penCursor">
+        <div class="pen-glow"></div>
+        <div class="pen-tip"></div>
+    </div>
+
+    <!-- Golden dust particles canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Hamburger menu -->
+    <div class="menu-toggle" id="menuToggle">
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+    </div>
+
+    <!-- Dropdown menu -->
+    <div class="dropdown-menu" id="dropdownMenu">
+        <div class="menu-item">
+            <button class="menu-button" id="playPauseBtn">⏸ Pause</button>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button" id="restartBtn">↻ Restart</button>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button" id="skipBtn">⏭ Skip Animation</button>
+        </div>
+        <div class="menu-item speed-control">
+            <span>Speed:</span>
+            <input type="range" class="speed-slider" id="speedSlider" min="0.5" max="2" step="0.1" value="1">
+        </div>
+        <div class="menu-item music-control">
+            <button class="menu-button" id="playPauseMusicBtn" style="width: auto; padding: 10px 15px;">▶</button>
+            <span>Volume:</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+        </div>
+    </div>
+
+    <!-- Background music (using audio element) -->
+    <audio id="backgroundMusic" loop>
+        <!-- Add your audio file here -->
+        <source src="tum-se-hi.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Letter content with proper paragraphs
+        const paragraphs = [
+            "So lately I started feeling guilty as I slowly detached from my family since I came to UK. Everyone who knows me really closely have an idea of how family oriented I am. Does it mean I don't like my parents or siblings anymore? or that I don't miss them? or that they can't provide the happy environment like back in home virtually?",
+            
+            "But my thought process changed when I started realising what changed this 23 years of constant, love, happy, sad events, emotions, pressure of achievements, togetherness and parting ways - all part of me in my family & my details of past life?",
+            
+            "I have a very special guy in my life, who didn't have to but healed me so much in just less than a year span that I saw my future with him. What did he do extraordinarily to make me feel outta this world?",
+            
+            "Efforts, love, constant push to focus on my career, being there during my periods, my birthdays, every special events since he has been a part of me, us! Adulting can be severe full of emotions suppressed, putting a fake happiness mask on and working your ass off daily to prove your worth in the world. But what really is striking to me is that of course I miss my family a lot, can my boyfriend ever replace my family? No! I don't think he had to either replace them, but all he does is makes me feel so comfortable, so much loved, in everything I do - I feel seen, I feel noticed, heard and appreciated all along. Parents have done their part of job as much and as well as they could & mould me into this good person that I am today.",
+            
+            "How is it possible that a girl like me when being kicked out at 6am in the morning for not obeying their orders, who comfort in this stranger guy she only knew couple weeks now? Me feeling low or sad and this guy doesn't go home to his family but sticks to me & makes sure I know he was with me in my tough times unknowingly. I may someday take this freedom of my life & choice for granted someday, but today I can say in my love life with this guy my happy, sad, terrible, in pain, confused, embarrassed, ups-downs everything is seen, heard, noted my opinions matter & I am confident than others!",
+            
+            "Is he loving me more than my family? No!, because they have been there always forever but is he totally capable of loving me as much in future, definitely Yes! Gifts and love has always been appreciated by me but this is a little token of my love for you. Thanks for being my safe place, I don't know what our future beholds but you're a very special person and I'm grateful I could appreciate every day of my life a little more, the positivity & maturity I see in my adulthood contributes to you majorly. Who says one person is not enough to change a thought, here, a 23 years young guy was capable enough to heal 23 years old trauma, changing a person's life perspectives forever & more to counting..."
+        ];
+
+        // Music player functionality
+        let audio = document.getElementById('backgroundMusic');
+        let musicPlayer = document.getElementById('musicPlayer');
+        let playPauseMusicBtn = document.getElementById('playPauseMusicBtn');
+        let volumeSlider = document.getElementById('volumeSlider');
+
+        // Music controls
+        playPauseMusicBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseMusicBtn.textContent = '⏸';
+            } else {
+                audio.pause();
+                playPauseMusicBtn.textContent = '▶';
+            }
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value / 100;
+        });
+
+        // Start experience function
+        function startExperience() {
+            const thankYouOverlay = document.getElementById('thankYouOverlay');
+            
+            // Fade out thank you overlay
+            thankYouOverlay.style.opacity = '0';
+            setTimeout(() => {
+                thankYouOverlay.style.display = 'none';
+                
+                // Show music player
+                musicPlayer.classList.remove('hidden');
+                audio.play();
+                playPauseMusicBtn.textContent = '⏸';
+                
+                // Start the main animation
+                const animation = new HandwritingAnimation();
+                animation.start();
+            }, 1000);
+        }
+
+        // Enhanced particle system for more golden dust
+        class GoldenDust {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = Math.random() * 3 + 1;
+                this.size = Math.random() * 3 + 1;
+                this.life = 1;
+                this.decay = Math.random() * 0.015 + 0.005;
+                this.shimmer = Math.random();
+                this.angle = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.03; // gravity
+                this.life -= this.decay;
+                this.shimmer = Math.sin(Date.now() * 0.003 + this.angle) * 0.5 + 0.5;
+                this.angle += 0.05;
+            }
+
+            draw(ctx) {
+                if (this.life <= 0) return;
+                
+                const opacity = this.life * this.shimmer;
+                
+                // Golden gradient
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, `rgba(255, 215, 0, ${opacity})`);
+                gradient.addColorStop(0.5, `rgba(243, 156, 18, ${opacity * 0.8})`);
+                gradient.addColorStop(1, `rgba(230, 126, 34, 0)`);
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Inner sparkle
+                if (this.shimmer > 0.7) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.9})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        class DustSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                
+                // Start enhanced ambient dust
+                this.ambientDust();
+            }
+
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            ambientDust() {
+                // Create more ambient floating dust
+                setInterval(() => {
+                    // Multiple particles at once for denser effect
+                    for (let i = 0; i < 3; i++) {
+                        if (Math.random() < 0.7) {
+                            const x = Math.random() * this.canvas.width;
+                            const y = -10;
+                            this.particles.push(new GoldenDust(x, y));
+                        }
+                    }
+                }, 100);
+            }
+
+            emit(x, y, count = 12) {
+                for (let i = 0; i < count; i++) {
+                    this.particles.push(new GoldenDust(x, y));
+                }
+            }
+
+            burstHearts(x, y) {
+                for (let i = 0; i < 50; i++) {
+                    const particle = new GoldenDust(x, y);
+                    const angle = (Math.PI * 2 * i) / 50;
+                    const speed = Math.random() * 6 + 3;
+                    particle.vx = Math.cos(angle) * speed;
+                    particle.vy = Math.sin(angle) * speed - 2;
+                    particle.size = Math.random() * 4 + 2;
+                    this.particles.push(particle);
+                }
+            }
+
+            update() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const particle = this.particles[i];
+                    particle.update();
+                    particle.draw(this.ctx);
+                    
+                    if (particle.life <= 0 || particle.y > this.canvas.height) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+                
+                requestAnimationFrame(() => this.update());
+            }
+        }
+
+        // Handwriting animation controller
+        class HandwritingAnimation {
+            constructor() {
+                this.letterContent = document.getElementById('letterContent');
+                this.signature = document.getElementById('signature');
+                this.progressBar = document.getElementById('progressBar');
+                this.penCursor = document.getElementById('penCursor');
+                this.notebookPage = document.getElementById('notebookPage');
+                this.dustSystem = new DustSystem();
+                
+                this.currentParagraphIndex = 0;
+                this.currentWordIndex = 0;
+                this.isPlaying = true;
+                this.speed = 1;
+                this.totalWords = 0;
+                this.wordsWritten = 0;
+                
+                this.setupContent();
+                this.setupControls();
+                this.dustSystem.update();
+            }
+
+            setupContent() {
+                // Create paragraphs with word spans
+                this.letterContent.innerHTML = paragraphs.map((paragraph, pIndex) => {
+                    const words = paragraph.split(' ');
+                    this.totalWords += words.length;
+                    const wordSpans = words.map((word, wIndex) => 
+                        `<span class="word" data-paragraph="${pIndex}" data-word="${wIndex}">${word}</span> `
+                    ).join('');
+                    return `<div class="paragraph">${wordSpans}</div>`;
+                }).join('');
+                
+                this.paragraphElements = this.letterContent.querySelectorAll('.paragraph');
+            }
+
+            setupControls() {
+                const menuToggle = document.getElementById('menuToggle');
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                const playPauseBtn = document.getElementById('playPauseBtn');
+                const restartBtn = document.getElementById('restartBtn');
+                const skipBtn = document.getElementById('skipBtn');
+                const speedSlider = document.getElementById('speedSlider');
+                
+                // Toggle menu
+                menuToggle.addEventListener('click', () => {
+                    menuToggle.classList.toggle('active');
+                    dropdownMenu.classList.toggle('active');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        menuToggle.classList.remove('active');
+                        dropdownMenu.classList.remove('active');
+                    }
+                });
+                
+                playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+                restartBtn.addEventListener('click', () => this.restart());
+                skipBtn.addEventListener('click', () => this.skipAnimation());
+                speedSlider.addEventListener('input', (e) => {
+                    this.speed = parseFloat(e.target.value);
+                });
+            }
+
+            start() {
+                // Direct start without loading screen
+                setTimeout(() => this.animateWords(), 500);
+            }
+
+            animateWords() {
+                if (!this.isPlaying || this.currentParagraphIndex >= paragraphs.length) {
+                    if (this.currentParagraphIndex >= paragraphs.length) {
+                        this.showSignature();
+                    }
+                    return;
+                }
+
+                const currentParagraph = this.paragraphElements[this.currentParagraphIndex];
+                const words = currentParagraph.querySelectorAll('.word');
+                
+                if (this.currentWordIndex >= words.length) {
+                    this.currentParagraphIndex++;
+                    this.currentWordIndex = 0;
+                    // Pause between paragraphs
+                    setTimeout(() => this.animateWords(), 500 / this.speed);
+                    return;
+                }
+
+                const wordElement = words[this.currentWordIndex];
+                const rect = wordElement.getBoundingClientRect();
+                const pageRect = this.notebookPage.getBoundingClientRect();
+                
+                // Update pen cursor position
+                this.penCursor.style.left = (rect.left + rect.width) + 'px';
+                this.penCursor.style.top = (rect.top + rect.height - 5) + 'px';
+                this.penCursor.style.opacity = '1';
+                
+                // Show word
+                wordElement.classList.add('visible');
+                
+                // Emit dust particles from pen position
+                this.dustSystem.emit(rect.left + rect.width, rect.top + rect.height, 8);
+                
+                // Update progress
+                this.wordsWritten++;
+                const progress = (this.wordsWritten / this.totalWords) * 100;
+                this.progressBar.style.width = progress + '%';
+                
+                // Auto-scroll if needed
+                const relativeTop = rect.top - pageRect.top + this.notebookPage.scrollTop;
+                const relativeBottom = relativeTop + rect.height;
+                const viewportHeight = this.notebookPage.clientHeight;
+                
+                if (relativeBottom > this.notebookPage.scrollTop + viewportHeight - 100) {
+                    this.notebookPage.scrollTo({
+                        top: relativeBottom - viewportHeight + 150,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                this.currentWordIndex++;
+                
+                // Calculate delay based on word and punctuation
+                let delay = 120 / this.speed;
+                const currentWord = wordElement.textContent;
+                
+                if (currentWord.includes('.') || currentWord.includes('?') || currentWord.includes('!')) {
+                    delay *= 3;
+                } else if (currentWord.includes(',') || currentWord.includes(';')) {
+                    delay *= 2;
+                } else if (currentWord.length > 7) {
+                    delay *= 1.3;
+                }
+                
+                this.animationTimeout = setTimeout(() => this.animateWords(), delay);
+            }
+
+            showSignature() {
+                this.penCursor.style.opacity = '0';
+                
+                // Scroll to show signature
+                setTimeout(() => {
+                    this.signature.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    setTimeout(() => {
+                        this.signature.style.opacity = '1';
+                        this.signature.style.transition = 'all 1s ease';
+                        
+                        // Burst particles for heart
+                        const heart = this.signature.querySelector('.heart');
+                        const rect = heart.getBoundingClientRect();
+                        this.dustSystem.burstHearts(
+                            rect.left + rect.width / 2,
+                            rect.top + rect.height / 2
+                        );
+                    }, 500);
+                }, 300);
+            }
+
+            togglePlayPause() {
+                this.isPlaying = !this.isPlaying;
+                const btn = document.getElementById('playPauseBtn');
+                btn.textContent = this.isPlaying ? '⏸ Pause' : '▶ Play';
+                
+                if (this.isPlaying) {
+                    this.animateWords();
+                } else {
+                    clearTimeout(this.animationTimeout);
+                }
+            }
+
+            restart() {
+                clearTimeout(this.animationTimeout);
+                this.currentParagraphIndex = 0;
+                this.currentWordIndex = 0;
+                this.wordsWritten = 0;
+                this.isPlaying = true;
+                this.progressBar.style.width = '0%';
+                this.signature.style.opacity = '0';
+                this.penCursor.style.opacity = '0';
+                
+                // Reset all words
+                const allWords = this.letterContent.querySelectorAll('.word');
+                allWords.forEach(word => {
+                    word.classList.remove('visible');
+                });
+                
+                // Scroll to top
+                this.notebookPage.scrollTop = 0;
+                
+                const btn = document.getElementById('playPauseBtn');
+                btn.textContent = '⏸ Pause';
+                
+                setTimeout(() => this.animateWords(), 500);
+            }
+
+            skipAnimation() {
+                clearTimeout(this.animationTimeout);
+                const allWords = this.letterContent.querySelectorAll('.word');
+                allWords.forEach(word => {
+                    word.classList.add('visible');
+                });
+                this.progressBar.style.width = '100%';
+                this.penCursor.style.opacity = '0';
+                this.showSignature();
+                this.isPlaying = false;
+                document.getElementById('playPauseBtn').textContent = '▶ Play';
+            }
+        }
+
+        // Initialize particle system on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Particles will be initialized when experience starts
+        });
+    </script>
+</body>
+</html>
